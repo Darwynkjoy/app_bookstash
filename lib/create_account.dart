@@ -17,7 +17,7 @@ Future <void> signUp()async{
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email.text.trim(), password: password.text.trim());
         print("User signed up");
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ForgotPassword()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
     }catch(e){
       print("signin error:$e");
     }
