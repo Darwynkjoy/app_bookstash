@@ -17,29 +17,17 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -59,4 +47,43 @@ class DefaultFirebaseOptions {
     projectId: 'bookstash-3b5de',
     storageBucket: 'bookstash-3b5de.firebasestorage.app',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBfebFVsJAnL-N5EpfOOFaVNXLSRp6MsSM',
+    appId: '1:510531605368:web:86acb905c101f323f2ae8d',
+    messagingSenderId: '510531605368',
+    projectId: 'bookstash-3b5de',
+    authDomain: 'bookstash-3b5de.firebaseapp.com',
+    storageBucket: 'bookstash-3b5de.firebasestorage.app',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDFok1ynW5Cei6_BBxP-bNmypnUEV3NQXw',
+    appId: '1:510531605368:ios:c6d1248f2ee709b6f2ae8d',
+    messagingSenderId: '510531605368',
+    projectId: 'bookstash-3b5de',
+    storageBucket: 'bookstash-3b5de.firebasestorage.app',
+    iosClientId: '510531605368-9eipbbgnh7qsqlhbu2dpe40ovr56e17h.apps.googleusercontent.com',
+    iosBundleId: 'com.example.libraryApp',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDFok1ynW5Cei6_BBxP-bNmypnUEV3NQXw',
+    appId: '1:510531605368:ios:c6d1248f2ee709b6f2ae8d',
+    messagingSenderId: '510531605368',
+    projectId: 'bookstash-3b5de',
+    storageBucket: 'bookstash-3b5de.firebasestorage.app',
+    iosClientId: '510531605368-9eipbbgnh7qsqlhbu2dpe40ovr56e17h.apps.googleusercontent.com',
+    iosBundleId: 'com.example.libraryApp',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyBfebFVsJAnL-N5EpfOOFaVNXLSRp6MsSM',
+    appId: '1:510531605368:web:d5d69d78a4f516c1f2ae8d',
+    messagingSenderId: '510531605368',
+    projectId: 'bookstash-3b5de',
+    authDomain: 'bookstash-3b5de.firebaseapp.com',
+    storageBucket: 'bookstash-3b5de.firebasestorage.app',
+  );
+
 }

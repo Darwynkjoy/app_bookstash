@@ -77,7 +77,7 @@ Future<UserCredential?> loginWithGoogle()async{
             Text("- or -",style: TextStyle(fontSize: 25,color: const Color.fromARGB(255, 117, 117, 117)),),
             GestureDetector(
               onTap: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SignIn()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>SignIn()));
               },
               child: Container(
                 height: 50,

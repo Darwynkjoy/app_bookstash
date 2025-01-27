@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:library_app/create_account.dart';
 import 'package:library_app/forgot_password.dart';
+import 'package:library_app/loginpage.dart';
 
 class SignIn extends StatefulWidget{
   @override
@@ -10,6 +12,34 @@ class  _signInState extends State<SignIn>{
 
   TextEditingController email=TextEditingController();
   TextEditingController password=TextEditingController();
+
+  Future <void> login()async{
+    try{
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email.text.trim(),
+        password: password.text.trim());
+        print("User loggedin up");
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> Loginpage()));
+    }catch(e){
+      print("Signin error: $e");
+      showErrorDialog(e.toString());
+    }
+  }
+
+  void showErrorDialog(String message){
+    showDialog(context: context,
+    builder: (BuildContext context)=>AlertDialog(
+      title: Text("Error"),
+      content: Text(message),
+      actions: [
+        TextButton(onPressed: (){
+          Navigator.of(context).pop();
+        },
+        child: Text("OK"))
+      ],
+    )
+    );
+  }
 
   @override
   Widget build(BuildContext context){
@@ -37,6 +67,7 @@ class  _signInState extends State<SignIn>{
             Text("Let's get started!",style: TextStyle(fontSize: 25,color: Colors.blue),),
             Spacer(),
             TextField(
+              controller: email,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15)),
@@ -46,6 +77,7 @@ class  _signInState extends State<SignIn>{
             ),
             Spacer(),
             TextField(
+              controller: password,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15)),
@@ -71,7 +103,9 @@ class  _signInState extends State<SignIn>{
                   backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
                 ),
-                onPressed: (){}, child: Text("Sign in",style: TextStyle(fontSize: 25,color: Colors.white),)),
+                onPressed: (){
+                  login();
+                }, child: Text("Sign in",style: TextStyle(fontSize: 25,color: Colors.white),)),
             ),
             Spacer(),
             Text("Don't have an account ?",style: TextStyle(fontSize: 25,color: Colors.grey),),
