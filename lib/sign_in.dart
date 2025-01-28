@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:library_app/create_account.dart';
 import 'package:library_app/forgot_password.dart';
-import 'package:library_app/loginpage.dart';
+import 'package:library_app/homepage.dart';
 
 class SignIn extends StatefulWidget{
   @override
@@ -19,7 +19,7 @@ class  _signInState extends State<SignIn>{
         email: email.text.trim(),
         password: password.text.trim());
         print("User loggedin up");
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> Loginpage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
     }catch(e){
       print("Signin error: $e");
       showErrorDialog(e.toString());

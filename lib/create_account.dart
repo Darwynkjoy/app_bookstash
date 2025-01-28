@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:library_app/forgot_password.dart';
 import 'package:library_app/sign_in.dart';
 
 class CreateAccount extends StatefulWidget{
