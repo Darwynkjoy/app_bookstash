@@ -9,6 +9,7 @@ class AddBooks extends StatefulWidget{
 class _addbooksState extends State<AddBooks>{
   TextEditingController title=TextEditingController();
   TextEditingController author=TextEditingController();
+  TextEditingController year=TextEditingController();
   TextEditingController rating=TextEditingController();
 
   @override
@@ -58,6 +59,15 @@ class _addbooksState extends State<AddBooks>{
             ),
             SizedBox(height: 20,),
             TextField(
+              controller: year,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15)),
+                  labelText: "Year of publication",labelStyle: TextStyle(fontSize: 25,color: Colors.blue),
+                  hintText: "YYYY",hintStyle: TextStyle(fontSize: 25,color: Colors.grey),
+                  ),),
+            SizedBox(height: 20,),
+            TextField(
               controller: rating,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
@@ -80,18 +90,20 @@ class _addbooksState extends State<AddBooks>{
                   Map<String,dynamic> booksInfoMap={
                     "title":title.text,
                     "author":author.text,
+                    "year":year.text,
                     "rating":rating.text,
                     "id":id,
                   };
                   setState(() {
                     title.clear();
                     author.clear();
+                    year.clear();
                     rating.clear();
                   });
                   await Database.addBooksDetails(booksInfoMap, id);
                   showDialog(context: context, builder: (BuildContext context){
                     return AlertDialog(
-                      title: Text("Note successfully added"),
+                      title: Text("Book successfully added"),
                       actions: [
                         TextButton(onPressed: (){
                           Navigator.pop(context);

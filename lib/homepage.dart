@@ -9,13 +9,10 @@ class Homepage extends StatefulWidget{
 }
 class _homepageState extends State<Homepage>{
 
-  List<Color> myColors=[
-  Colors.grey,
-  Colors.lightBlue,
-  Colors.lightGreenAccent,
-  Colors.cyanAccent,
-  Colors.lightGreen
-  ];
+  TextEditingController title=TextEditingController();
+  TextEditingController author=TextEditingController();
+  TextEditingController year=TextEditingController();
+  TextEditingController rating=TextEditingController();
 
   Stream<QuerySnapshot>? BooksStream;
 
@@ -45,12 +42,9 @@ class _homepageState extends State<Homepage>{
       }
       return Padding(
         padding: const EdgeInsets.all(10.0),
-        child: GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: .47,
-          ),
+        child: ListView.separated(separatorBuilder: (context,index){
+          return SizedBox(height: 30,);
+        },
           itemCount: snapshots.data!.docs.length,
           itemBuilder: (context,index){
             DocumentSnapshot Bs=snapshots.data!.docs[index];
@@ -58,51 +52,147 @@ class _homepageState extends State<Homepage>{
               children: [
                 Container(
                   padding: EdgeInsets.all(8),
-                  height: 300,
-                  width: 200,
-                    decoration: BoxDecoration(color: myColors[index % 5]),
+                  height: 200,
+                  width: 400,
+                  decoration: BoxDecoration(border: Border.all(width: 2,color: Colors.black)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(''''''+(Bs["title"] ?? "N/A"),
+                        Text('''Title: '''+(Bs["title"] ?? "N/A"),
                         style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
                           color: Colors.black),
                           textAlign: TextAlign.left,
                           ),
+                          Text('''Year of publication:'''+(Bs["year"] ?? "N/A"),
+                            style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              IconButton(onPressed: (){}, icon: Icon(Icons.more_vert)),
-                              Text("- "+(Bs["author"] ?? "N/A"),style: TextStyle(fontSize: 15,),overflow: TextOverflow.clip,),
+                              Text("Author: "+(Bs["author"] ?? "N/A"),style: TextStyle(fontSize: 20,),overflow: TextOverflow.clip,),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text("Rating:"+(Bs["rating"] ?? "N/A"),style: TextStyle(fontSize: 20,),),
+                                  Icon(Icons.star,size: 20,color: Colors.amber,),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(onPressed: (){
+                                    title.text=Bs["title"];
+                                    author.text=Bs["author"];
+                                    year.text=Bs["year"];
+                                    rating.text=Bs["rating"];
+                                    showModalBottomSheet(context: context, builder: (BuildContext context){
+                                      final id=Bs["id"];
+                                      return Container(
+                                        width: 410,
+                                        height: 450,
+                                        child: Column(
+                                          children: [
+                                            Text("Edit book",style: TextStyle(fontSize: 25,color: Colors.blue),),
+            SizedBox(height: 20,),
+            TextField(
+              controller: title,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15)),
+                  hintText: "Enter title of the book",hintStyle: TextStyle(fontSize: 25,color: Colors.grey),
+                  labelText: "Title",labelStyle: TextStyle(fontSize: 25,color: Colors.blue),
+                  ),
+            ),
+            SizedBox(height: 20,),
+            TextField(
+              controller: author,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15)),
+                  hintText: "Enter authors name",hintStyle: TextStyle(fontSize: 25,color: Colors.grey),
+                  labelText: "Author",labelStyle: TextStyle(fontSize: 25,color: Colors.blue),
+                  ),
+            ),
+            SizedBox(height: 20,),
+            TextField(
+              controller: year,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15)),
+                  labelText: "Year of publication",labelStyle: TextStyle(fontSize: 25,color: Colors.blue),
+                  hintText: "YYYY",hintStyle: TextStyle(fontSize: 25,color: Colors.grey),
+                  ),),
+            SizedBox(height: 20,),
+            TextField(
+              controller: rating,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15)),
+                  hintText: "Enter rating",hintStyle: TextStyle(fontSize: 25,color: Colors.grey),
+                  labelText: "Rating",labelStyle: TextStyle(fontSize: 25,color: Colors.blue),
+                  ),
+            ),
+            SizedBox(height: 20,),
+            Container(
+              height: 50,
+              width: 350,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
+                ),
+                onPressed: ()async{
+                  Map<String,dynamic> updateInfo={
+                    "title":title.text,
+                    "author":author.text,
+                    "year":year.text,
+                    "rating":rating.text,
+                            };
+                            Navigator.pop(context);
+                            await Database.updateBookDetails(id,updateInfo);
+                }, child: Text("Update",style: TextStyle(fontSize: 25,color: Colors.white),)),
+            ),
+          ],
+                                        ),
+                                      );
+                                    });
+                                  }, icon: Icon(Icons.edit),iconSize: 25,color: Colors.blue,),
+                                  IconButton(onPressed: (){
+                                    showDialog(context: context, builder: (BuildContext context){
+                                      return AlertDialog(
+                                        title: Text("Alert Box"),
+                                        content: Text("Do you want to delete?"),
+                                        actions: [
+                                          TextButton(onPressed: ()async{
+                                            Navigator.pop(context);
+                                            await Database.deleteBookDetails(Bs["id"]);
+                                          }, child: Text("Yes",style: TextStyle(color: Colors.blue),)),
+                                          TextButton(onPressed: (){
+                                            Navigator.pop(context);
+                                          }, child: Text("No",style: TextStyle(color: Colors.blue),))
+                                        ],
+                                      );
+                                    });
+                                  }, icon: Icon(Icons.delete),iconSize: 25,color: Colors.blue,),
+                                ],
+                              )
                             ],
                           )
                       ],
                     ),
                 ),
-                Container(
-                  height: 82,
-                  width: 200,
-                  decoration: BoxDecoration(color: Colors.white),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(''''''+(Bs["title"] ?? "N/A"),
-                      style: TextStyle(
-                        fontSize: 19,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,),
-                      Row(
-                        children: [
-                          Text("Rating:"+(Bs["rating"] ?? "N/A"),style: TextStyle(fontSize: 18,color: const Color.fromARGB(255, 0, 140, 255)),),
-                          Icon(Icons.star,size: 18,color: Colors.amber,)
-                        ],
-                      )
-                    ],
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    
+                  ],
                 )
               ],
             );

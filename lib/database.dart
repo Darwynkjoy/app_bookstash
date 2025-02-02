@@ -18,4 +18,11 @@ class Database {
       .doc(id)
       .update(updateInfo);
     }
+  
+  static Future deleteBookDetails(String id)async{
+    return await FirebaseFirestore.instance
+    .collection("Bookstash")
+    .doc(id)
+    .delete();
+  }
 }
