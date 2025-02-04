@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:library_app/firebase_options.dart';
-import 'package:library_app/homepage.dart';
+
+import 'loginpage.dart';
 
 
 void main()async{
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'bookStash',
       debugShowCheckedModeBanner: false,
-      home: Homepage(),
+      home: Loginpage(),
     );
   }
 }

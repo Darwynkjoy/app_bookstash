@@ -19,7 +19,7 @@ class  _signInState extends State<SignIn>{
         email: email.text.trim(),
         password: password.text.trim());
         print("User loggedin up");
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>Homepage()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Homepage()));
     }catch(e){
       print("Signin error: $e");
       showErrorDialog(e.toString());
